@@ -3,7 +3,7 @@
 
 #include "I2CBus.h"
 
-#define ITG3200 WHO_AM_I            0x00
+#define ITG3200_WHO_AM_I            0x00
 #define ITG3200_SMPLRT_DIV          0x15
 #define ITG3200_DLPF_FS             0x16
 #define ITG3200_INT_CFG             0x17
