@@ -1,8 +1,8 @@
 #include "itg3200.h"
 #include <stdexcept>
 
-#define ITG3200_ADDRESS_LOW     0b11010000
-#define ITG3200_ADDRESS_HIGH    0b11010010
+#define ITG3200_ADDRESS_LOW     0b01101000
+#define ITG3200_ADDRESS_HIGH    0b01101001
 
 ITG3200::ITG3200(const char * i2cDeviceName) :
     i2c(i2cDeviceName)
@@ -40,6 +40,8 @@ void ITG3200::detectAddress()
 {
     i2c.addressSet(ITG3200_ADDRESS_LOW);
     if (i2c.tryReadByte(ITG3200_WHO_AM_I) == ITG3200_ADDRESS_LOW) return;
+    i2c.addressSet(ITG3200_ADDRESS_HIGH);
+    if (i2c.tryReadByte(ITG3200_WHO_AM_I) == ITG3200_ADDRESS_HIGH) return;
 
     throw std::runtime_error("Reading WHO_AM_I-register failed.");
 }
