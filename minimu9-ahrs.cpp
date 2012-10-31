@@ -54,7 +54,9 @@ void output_matrix(quaternion & rotation)
 
 void output_euler(quaternion & rotation)
 {
-    std::cout << (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
+//    std::cout << (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
+    vector temp = (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
+    std::cout << "!ANG:" << temp(2) << "," << temp(1) << "," << temp(0) << std::endl;
 }
 
 int millis()
