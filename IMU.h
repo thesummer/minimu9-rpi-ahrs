@@ -16,7 +16,8 @@ public:
     virtual void loadCalibration() = 0;
 
     vector gyro_offset;
-    int_vector mag_min, mag_max;
+    matrix calMatrix;
+    vector calOffset;
 
     int_vector raw_m, raw_a, raw_g;
 };

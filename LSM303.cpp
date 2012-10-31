@@ -86,6 +86,7 @@ void LSM303::enable(void)
 
     // Enable magnetometer
     // Continuous conversion mode
+    writeMagReg(LSM303_CRB_REG_M, 0b01000000);  // FS = +-1.9 gauss
     writeMagReg(LSM303_MR_REG_M, 0x00);
 }
 
