@@ -1,5 +1,5 @@
 #include "vector.h"
-#include "MinIMU9.h"
+#include "imuuspace.h"
 #include "version.h"
 #include <iostream>
 #include <iomanip>
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
             return 0;
         }
 
-        MinIMU9 imu(i2cDevice.c_str());
+        imuUspace imu(i2cDevice.c_str());
 
         rotation_output_function * output;
 
