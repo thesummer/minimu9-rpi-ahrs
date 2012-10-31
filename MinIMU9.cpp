@@ -28,7 +28,12 @@ void MinIMU9::loadCalibration()
         throw posix_error("Failed to open calibration file ~/.minimu9-ahrs-cal.");
     }
     
-    file >> mag_min(0) >> mag_max(0) >> mag_min(1) >> mag_max(1) >> mag_min(2) >> mag_max(2);
+    file >> calMatrix(0,0) >> calMatrix(0,1) >> calMatrix(0,2);
+    file >> calMatrix(1,0) >> calMatrix(1,1) >> calMatrix(1,2);
+    file >> calMatrix(2,0) >> calMatrix(2,1) >> calMatrix(2,2);
+
+    file >> calOffset(0) >> calOffset(1) >> calOffset(2);
+
     if (file.fail() || file.bad())
     {
         throw std::runtime_error("Failed to parse calibration file ~/.minimu9-ahrs-cal.");
@@ -57,9 +62,11 @@ vector MinIMU9::readMag()
     IMU::raw_m = int_vector_from_ints(&compass.m);
     
     vector v;
-    v(0) = (float)(compass.m[0] - mag_min(0)) / (mag_max(0) - mag_min(0)) * 2 - 1;
-    v(1) = (float)(compass.m[1] - mag_min(1)) / (mag_max(1) - mag_min(1)) * 2 - 1;
-    v(2) = (float)(compass.m[2] - mag_min(2)) / (mag_max(2) - mag_min(2)) * 2 - 1;
+    v = IMU::raw_m.cast<float>() - calOffset;
+    v = calMatrix * v;
+//    v(0) = (float)(compass.m[0] - mag_min(0)) / (mag_max(0) - mag_min(0)) * 2 - 1;
+//    v(1) = (float)(compass.m[1] - mag_min(1)) / (mag_max(1) - mag_min(1)) * 2 - 1;
+//    v(2) = (float)(compass.m[2] - mag_min(2)) / (mag_max(2) - mag_min(2)) * 2 - 1;
     return v;
 }
 
