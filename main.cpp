@@ -1,9 +1,14 @@
 #include<shareddata.h>
 #include<ahrs.h>
+#include<gpsetag.h>
 #include<iostream>
 #include<vector.h>
 #include <iomanip>
+#include <stdio.h>
+#include <stdlib.h>
 #include <boost/program_options.hpp>
+#include <time.h>
+#include <sys/time.h>
 
 namespace opts = boost::program_options;
 
@@ -57,12 +62,14 @@ int main(int argc, char *argv[])
     try
     {
         // Define what all the command-line parameters are.
-        std::string mode, output_mode, i2cDevice;
+        std::string mode, output_mode, i2cDevice, serialDevice;
         opts::options_description desc("Allowed options");
         desc.add_options()
                 ("help,h", "produce help message")
                 ("i2c-bus,b", opts::value<std::string>(&i2cDevice)->default_value("/dev/i2c-0"),
                  "i2c-bus the IMU is connected to")
+                ("serDev,s", opts::value<std::string>(&serialDevice)->default_value("/dev/ttyO1"),
+                 "serial device the ETAG is connected to")
                 ("mode", opts::value<std::string>(&mode)->default_value("normal"),
                  "specifies what algorithm to use.\n"
                  "normal: Fuse compass and gyro.\n"
@@ -88,6 +95,7 @@ int main(int argc, char *argv[])
 
         sharedData sd;
         ahrs attitude(sd, i2cDevice.c_str());
+//        gpsEtag etag(sd, serialDevice);
 
         rotation_output_function * output;
 
@@ -135,11 +143,19 @@ int main(int argc, char *argv[])
         }
 
         attitude.start();
-
+//        etag.start();
         while(1)
         {
             quaternion temp = sd.getRotation();
+//            sharedData::gpsData gps;
             output(temp);
+//            if(sd.newGpsData())
+//            {
+//                gps = sd.getGpsData();
+//                std::cout << "Long: " << gps.longitude << "\t Lat: " << gps.latitude
+//                          << "\t Height: " << gps.height << std::endl;
+//            }
+
             usleep(20*1000);
         }
 

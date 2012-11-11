@@ -22,3 +22,23 @@ void sharedData::setRotation(quaternion rotation)
        this->mRotation = rotation;
     pthread_mutex_unlock(&mMutexRotation);
 }
+
+sharedData::gpsData sharedData::getGpsData()
+{
+    gpsData temp;
+    pthread_mutex_lock(&mMutexGPS);
+       temp = mGpsData;
+    pthread_mutex_unlock(&mMutexGPS);
+
+    mNewGpsData = false;
+    return temp;
+}
+
+void sharedData::setGpsData(sharedData::gpsData newGps)
+{
+    pthread_mutex_lock(&mMutexGPS);
+       this->mGpsData = newGps;
+    pthread_mutex_unlock(&mMutexGPS);
+
+    mNewGpsData = true;
+}

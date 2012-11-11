@@ -5,8 +5,8 @@
 //#include <iomanip>
 //#include <stdio.h>
 //#include <stdlib.h>
-#include <time.h>
-#include <sys/time.h>
+//#include <time.h>
+//#include <sys/time.h>
 #include <system_error>
 #include <thread.h>
 #include <pthread.h>
@@ -51,7 +51,7 @@ bool ahrs::start()
     pthread_create (&mThread, NULL, ahrs::callThreadFunction, this) ;
     mRunning = true;
 
-    return mRunning;
+    return true;
 }
 
 bool ahrs::stop()

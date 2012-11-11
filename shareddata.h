@@ -7,19 +7,31 @@
 class sharedData
 {
 public:
+    struct gpsData
+    {
+        float longitude;
+        float latitude;
+        float height;
+    };
+
     sharedData();
 
     quaternion getRotation();
     void setRotation(quaternion rotation);
-//    getGPS();
+
+    gpsData  getGpsData();
+    void setGpsData(gpsData newGps);
+    bool newGpsData() { return mNewGpsData; }
 
 
 private:
     quaternion mRotation;
     pthread_mutex_t mMutexRotation;
 
-//    GPS
-//    pthread_mutex_t mMutexGPS;
+    struct gpsData mGpsData;
+    pthread_mutex_t mMutexGPS;
+    bool mNewGpsData;
+
 
 
 };
