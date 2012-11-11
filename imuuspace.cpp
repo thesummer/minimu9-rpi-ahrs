@@ -9,6 +9,8 @@
 imuUspace::imuUspace(const char *i2cDeviceName):
     compass(i2cDeviceName), gyro(i2cDeviceName)
 {
+    calMatrix = matrix::Identity();
+    calOffset = vector::Zero();
 }
 
 
@@ -27,7 +29,7 @@ void imuUspace::loadCalibration()
     std::ifstream file(expansion_result.we_wordv[0]);
     if (file.fail())
     {
-        throw posix_error("Failed to open calibration file ~/.minimu9-ahrs-cal.");
+        throw posix_error("Failed to open calibration file ~/.ahrs-cal.");
     }
 
     file >> calMatrix(0,0) >> calMatrix(0,1) >> calMatrix(0,2);

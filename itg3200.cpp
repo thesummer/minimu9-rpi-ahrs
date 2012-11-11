@@ -31,8 +31,8 @@ void ITG3200::read()
     uint8_t block[6];
     i2c.readBlock(ITG3200_GYRO_XOUT_H, sizeof(block), block);
 
-    g[0] = (int16_t)(block[0] << 8 | block[1]);
-    g[1] = (int16_t)(block[2] << 8 | block[3]);
+    g[0] = -(int16_t)(block[0] << 8 | block[1]);
+    g[1] = -(int16_t)(block[2] << 8 | block[3]);
     g[2] = (int16_t)(block[4] << 8 | block[5]);
 }
 

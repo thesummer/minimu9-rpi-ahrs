@@ -1,5 +1,5 @@
 OBJs := $(patsubst %.cpp, %.o, $(wildcard *.cpp))
-BIN := minimu9-ahrs
+BIN := main
 
 CC := g++
 
@@ -12,7 +12,7 @@ CPPFLAGS += -Wall
 CPPFLAGS += --std=c++0x
 
 # Use boost libraries
-LDFLAGS += -lboost_program_options
+LDFLAGS += -lpthread -lboost_program_options
 
 # Put debugging info in there so we can get stack traces.
 #CPPFLAGS += -g -rdynamic
@@ -29,6 +29,7 @@ CPPFLAGS += -MD -MP
 all: vector.h.gch $(BIN)
 
 $(BIN) : $(OBJs)
+	$(CC)  $(OBJs) -o $(BIN) $(LDFLAGS)
 
 DEPs := $(OBJs:%.o=%.d)
 
