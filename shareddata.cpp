@@ -3,7 +3,7 @@
 sharedData::sharedData()
 {
      pthread_mutex_init(&mMutexRotation, NULL);
-//     pthread_mutex_init(&mMutexGPS, NULL);
+     pthread_mutex_init(&mMutexGPS, NULL);
 }
 
 quaternion sharedData::getRotation()

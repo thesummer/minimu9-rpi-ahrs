@@ -27,7 +27,7 @@ std::ostream & operator << (std::ostream & os, const matrix & matrix)
 {
     return os << (vector)matrix.row(0) << ' '
               << (vector)matrix.row(1) << ' '
-              << (vector)matrix.row(2);
+              << (vector)matrix.row(2) << std::endl;
 }
 
 std::ostream & operator << (std::ostream & os, const quaternion & quat)
@@ -37,6 +37,7 @@ std::ostream & operator << (std::ostream & os, const quaternion & quat)
               << FLOAT_FORMAT << quat.y() << ' '
               << FLOAT_FORMAT << quat.z();
 }
+
 
 typedef void rotation_output_function(quaternion& rotation);
 
@@ -55,6 +56,11 @@ void output_euler(quaternion & rotation)
 //    std::cout << (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
     vector temp = (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
     std::cout << "!ANG:" << temp(2) << "," << temp(1) << "," << temp(0) << std::endl;
+}
+
+void output_raw(quaternion & rotation)
+{
+    ;
 }
 
 int main(int argc, char *argv[])
@@ -95,7 +101,7 @@ int main(int argc, char *argv[])
 
         sharedData sd;
         ahrs attitude(sd, i2cDevice.c_str());
-//        gpsEtag etag(sd, serialDevice);
+        gpsEtag etag(sd, serialDevice);
 
         rotation_output_function * output;
 
@@ -123,6 +129,7 @@ int main(int argc, char *argv[])
         if (mode == "raw")
         {
             attitude.setFuseType(ahrs::raw);
+            output = &output_raw;
         }
         else if (mode == "gyro-only")
         {
@@ -143,18 +150,18 @@ int main(int argc, char *argv[])
         }
 
         attitude.start();
-//        etag.start();
+        etag.start();
         while(1)
         {
             quaternion temp = sd.getRotation();
-//            sharedData::gpsData gps;
+            sharedData::gpsData gps;
             output(temp);
-//            if(sd.newGpsData())
-//            {
-//                gps = sd.getGpsData();
-//                std::cout << "Long: " << gps.longitude << "\t Lat: " << gps.latitude
-//                          << "\t Height: " << gps.height << std::endl;
-//            }
+            if(sd.newGpsData())
+            {
+                gps = sd.getGpsData();
+                std::cout << "Long: " << gps.longitude << "\t Lat: " << gps.latitude
+                          << "\t Height: " << gps.height << std::endl;
+            }
 
             usleep(20*1000);
         }

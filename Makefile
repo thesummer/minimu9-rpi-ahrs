@@ -3,7 +3,8 @@ BIN := main
 
 CC := g++
 
-CPPFLAGS += -I. -I./nmealib/include/nmea
+CPPFLAGS += -I. 
+#-I./nmealib/include/nmea
 
 # All warnings
 CPPFLAGS += -Wall
