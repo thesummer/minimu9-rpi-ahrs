@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
         }
 
         sharedData sd;
-        ahrs attitude(sd, i2cDevice.c_str());
-        gpsEtag etag(sd, serialDevice);
+//        ahrs attitude(sd, i2cDevice.c_str());
+//        gpsEtag etag(sd, serialDevice);
         camera cam(sd, "./cam.log");
 
         rotation_output_function * output;
@@ -131,20 +131,20 @@ int main(int argc, char *argv[])
         // Figure out the basic operating mode and start running.
         if (mode == "raw")
         {
-            attitude.setFuseType(ahrs::raw);
+//            attitude.setFuseType(ahrs::raw);
             output = &output_raw;
         }
         else if (mode == "gyro-only")
         {
-           attitude.setFuseType(ahrs::gyro_only);
+//           attitude.setFuseType(ahrs::gyro_only);
         }
         else if (mode == "compass-only")
         {
-            attitude.setFuseType(ahrs::compass_only);
+//            attitude.setFuseType(ahrs::compass_only);
         }
         else if (mode == "normal")
         {
-            attitude.setFuseType(ahrs::normal);
+//            attitude.setFuseType(ahrs::normal);
         }
         else
         {
@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        attitude.start();
-        etag.start();
+//        attitude.start();
+//        etag.start();
         cam.start();
 
         while(1)

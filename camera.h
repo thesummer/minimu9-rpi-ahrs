@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "OCVCapture.h"
 #include <shareddata.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <fstream>
@@ -20,7 +21,7 @@ public:
 private:
     sharedData& mSharedData; //reference
     std::fstream mFile;
-    cv::VideoCapture mCap;
+    OCVCapture mCap;
     int mInterval;
     int mImageCount;
 

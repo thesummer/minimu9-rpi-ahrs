@@ -1,4 +1,5 @@
 #include "camera.h"
+
 #include <iostream>
 #include <iomanip>
 
@@ -7,11 +8,15 @@
 #include <shareddata.h>
 
 camera::camera(sharedData& sD, std::string filename):
-     mSharedData(sD), mFile(filename, std::fstream::out), mCap(0), mImageCount(0), mRunning(false)
+     mSharedData(sD), mFile(filename, std::fstream::out), mImageCount(0), mRunning(false)
 {
     mInterval = 1;
-    if(!mCap.isOpened())
+    mCap.setDesiredSize(1280, 1024);
+    mCap.open();
+
+    if(!mCap.isOpen())
         std::cout << "Opening video device failed" << std::endl;
+
 }
 
 bool camera::singleShot()
@@ -73,7 +78,12 @@ void *camera::threadCamera()
 bool camera::takePicture()
 {
     cv::Mat frame;
-    mCap >> frame;
+    if (!mCap.grab())
+    {
+        std::cout << "Capturing failed" << std::endl;
+    }
+
+    mCap.rgb(frame);
 
     std::ostringstream fileName;
     fileName << std::right;
