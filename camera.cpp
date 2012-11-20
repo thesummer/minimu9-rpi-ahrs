@@ -9,7 +9,9 @@
 camera::camera(sharedData& sD, std::string filename):
      mSharedData(sD), mFile(filename, std::fstream::out), mCap(0), mImageCount(0), mRunning(false)
 {
-    // nothing to do here
+    mInterval = 1;
+    if(!mCap.isOpened())
+        std::cout << "Opening video device failed" << std::endl;
 }
 
 bool camera::singleShot()
@@ -53,7 +55,7 @@ void camera::setCaptureInterval(int seconds)
 void *camera::threadCamera()
 {
     struct periodic_info info;
-    makePeriodic(mImageCount*1000000, &info);
+    makePeriodic(mInterval*1000000, &info);
 
     while(1)
     {
@@ -76,13 +78,13 @@ bool camera::takePicture()
     std::ostringstream fileName;
     fileName << std::right;
     fileName.fill('0');
-    fileName << "image" << std::setw(4) << mImageCount;
+    fileName << "./image" << std::setw(4) << mImageCount << ".jpg";
     cv::imwrite(fileName.str(), frame);
     mImageCount++;
 
     matrix rot = mSharedData.getRotation().toRotationMatrix();
     mFile << fileName.str() << '\t' << rot.row(0) << rot.row(1) << rot.row(2);
-    mFile << rot.eulerAngles(2, 1, 0) * (180 / M_PI) << std::endl;
+    mFile << rot.eulerAngles(2, 1, 0).transpose() * (180 / M_PI) << std::endl;
 
     return true;
 }

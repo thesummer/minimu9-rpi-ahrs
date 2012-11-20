@@ -1,6 +1,8 @@
 #include<shareddata.h>
 #include<ahrs.h>
 #include<gpsetag.h>
+#include <camera.h>
+
 #include<iostream>
 #include<vector.h>
 #include <iomanip>
@@ -102,6 +104,7 @@ int main(int argc, char *argv[])
         sharedData sd;
         ahrs attitude(sd, i2cDevice.c_str());
         gpsEtag etag(sd, serialDevice);
+        camera cam(sd, "./cam.log");
 
         rotation_output_function * output;
 
@@ -151,6 +154,8 @@ int main(int argc, char *argv[])
 
         attitude.start();
         etag.start();
+        cam.start();
+
         while(1)
         {
             quaternion temp = sd.getRotation();
