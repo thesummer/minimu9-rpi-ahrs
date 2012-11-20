@@ -5,7 +5,7 @@
 #include <thread.h>
 #include <pthread.h>
 
-#include<nmea.h>
+#include<nmea/nmea.h>
 
 gpsEtag::gpsEtag(sharedData& sD, std::string serialDev):
     mSharedData(sD), mSerialDevice(serialDev), mRunning(false)

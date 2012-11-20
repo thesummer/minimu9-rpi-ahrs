@@ -1,6 +1,7 @@
 #include "shareddata.h"
 
-sharedData::sharedData()
+sharedData::sharedData():
+    mNewGpsData(false)
 {
      pthread_mutex_init(&mMutexRotation, NULL);
      pthread_mutex_init(&mMutexGPS, NULL);

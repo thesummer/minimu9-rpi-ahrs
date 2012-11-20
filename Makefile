@@ -3,8 +3,7 @@ BIN := main
 
 CC := g++
 
-CPPFLAGS += -I. 
-#-I./nmealib/include/nmea
+CPPFLAGS += -I./nmealib/include -I.
 
 # All warnings
 CPPFLAGS += -Wall
@@ -13,7 +12,7 @@ CPPFLAGS += -Wall
 CPPFLAGS += --std=c++0x
 
 # Use boost libraries
-LDFLAGS += -L./libs -lpthread -lboost_program_options -lserial -lnmea
+LDFLAGS += -L./libs -lpthread -lboost_program_options -lserial -lnmea -lopencv_core -lopencv_highgui
 
 # Put debugging info in there so we can get stack traces.
 #CPPFLAGS += -g -rdynamic
