@@ -84,17 +84,27 @@ bool camera::takePicture()
     }
 
     mCap.rgb(frame);
+    sharedData::gpsData gps = mSharedData.getGpsData();
 
     std::ostringstream fileName;
     fileName << std::right;
+
+
     fileName.fill('0');
     fileName << "./image" << std::setw(4) << mImageCount << ".jpg";
     cv::imwrite(fileName.str(), frame);
     mImageCount++;
 
+    // Add metainfo to log file
     matrix rot = mSharedData.getRotation().toRotationMatrix();
-    mFile << fileName.str() << '\t' << rot.row(0) << rot.row(1) << rot.row(2);
-    mFile << rot.eulerAngles(2, 1, 0).transpose() * (180 / M_PI) << std::endl;
+    // Date and Time
+    mFile << gps.utc.year << '-' << gps.utc.mon << '-' << gps.utc.day
+          << '-' << gps.utc.hour << ':' << gps.utc.min << ':' << gps.utc.sec << '\t';
+    // Filename and rotation
+    mFile << fileName.str() << '\t' << rot.row(0) << rot.row(1) << rot.row(2) << '\t';
+    mFile << rot.eulerAngles(2, 1, 0).transpose() * (180 / M_PI) << '\t';
+    // Gps position
+    mFile << gps.latitude << '\t' << gps.longitude << '\t' << gps.height << std::endl;
 
     return true;
 }

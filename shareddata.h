@@ -2,6 +2,7 @@
 #define SHAREDDATA_H
 
 #include<vector.h>
+#include<nmea/time.h>
 
 
 class sharedData
@@ -12,6 +13,7 @@ public:
         float longitude;
         float latitude;
         float height;
+        nmeaTIME utc;
     };
 
     sharedData();
