@@ -12,6 +12,8 @@
 #include "crc.h"
 #include "timer.h"
 #include "usart.h"
+#include "itpu.h"
+#include "gpsData.h"
 
 // sync byte to synchronize the ground station and U-SPACE
 
@@ -188,15 +190,20 @@ OBDH_subsystem *OBDH;
 
 int TM_update()
 {
+    float euler[3];
+    getEulerAngle(euler);
+
+    struct gpsData gps = getGps();
 
 
-	GPS->latitude = 7.7;
-	GPS->longitude = 8.8;
-	GPS->altitude = 9.9;
-	GPS->UTC_time = 10.10;
-	ADCS->AHRS[0] = 11.11;
-	ADCS->AHRS[1] = 12.12;
-	ADCS->AHRS[2] = 13.13;
+    GPS->latitude = gps.latitude;
+    GPS->longitude = gps.longitude;
+    GPS->altitude = gps.height;
+    GPS->UTC_time = 10.10;   //format??
+
+    ADCS->AHRS[0] = euler[0];
+    ADCS->AHRS[1] = euler[1];
+    ADCS->AHRS[2] = euler[2];
 
 return 0;
 }

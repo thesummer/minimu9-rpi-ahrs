@@ -21,6 +21,7 @@
 #include "adc_7998.h"
 #include "timer.h"
 #include "usart.h"
+#include "itpu.h"
 
 //#define		ADC1_addr 	0x21
 #define channel_num  8
@@ -29,7 +30,7 @@ const int ADC1_addr = 0x21 ;
 const int ADC2_addr = 0x22 ;
 int file_ADC1,file_ADC2;
 
-int main()
+int main(int argc, char *argv[])
 {
 
 	memory_alloc();
@@ -45,8 +46,17 @@ int main()
 		   pthread_create( &thread1, NULL, &usart_read_routine, NULL);
 
 
-///////////////////  Write all the TMs   ///////////////
+/////////////////// Set up ITPU ////////////////////////
 
+           if (itpuInit(argc, argv) != 0)
+           {
+               printf("ERROR: Initializing ITPU failed\n");
+               return 1;
+           }
+
+           itpuStart();
+
+///////////////////  Write all the TMs   ///////////////           
 		   while (1)
 		   	   {
 		   		   delay_ms(5000);
