@@ -1,3 +1,5 @@
+#include <itpu.h>
+
 #include<shareddata.h>
 #include<ahrs.h>
 #include<gpsetag.h>
@@ -13,6 +15,13 @@
 #include <sys/time.h>
 
 namespace opts = boost::program_options;
+
+
+sharedData sd;
+static camera cam;
+static gpsEtag etag;
+static ahrs attitude;
+
 
 // An Euler angle could take 8 chars: -234.678, but usually we only need 6.
 float field_width = 6;
@@ -65,7 +74,7 @@ void output_raw(quaternion & rotation)
     ;
 }
 
-int main(int argc, char *argv[])
+int itpuInit(int argc, char *argv[])
 {
     try
     {
@@ -101,10 +110,10 @@ int main(int argc, char *argv[])
             return 0;
         }
 
-        sharedData sd;
-        ahrs attitude(sd, i2cDevice.c_str());
-        gpsEtag etag(sd, serialDevice);
-        camera cam(sd, "./cam.log");
+        attitude = new ahrs(sd, i2cDevice.c_str());
+        etag = new gpsEtag(sd, serialDevice);
+        cam  = new camera(sd, "./cam.log");
+        sd   = new sharedData();
 
         rotation_output_function * output;
 
@@ -152,26 +161,6 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        attitude.start();
-        etag.start();
-//        cam.start();
-
-        while(1)
-        {
-            quaternion temp = sd.getRotation();
-            sharedData::gpsData gps;
-            output(temp);
-            if(sd.newGpsData())
-            {
-                gps = sd.getGpsData();
-                std::cout << "Long: " << gps.longitude << "\t Lat: " << gps.latitude
-                          << "\t Height: " << gps.height << std::endl;
-            }
-
-            usleep(20*1000);
-        }
-
-
         return 0;
     }
     catch(const std::system_error & error)
@@ -191,4 +180,10 @@ int main(int argc, char *argv[])
         std::cerr << "Error: " << error.what() << std::endl;
         return 9;
     }
+}
+
+void itpuStart()
+{
+    attitude.start();
+    etag.start();
 }
