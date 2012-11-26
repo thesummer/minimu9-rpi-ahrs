@@ -64,6 +64,7 @@ void *gpsEtag::threadGps()
         gps.latitude  = dpos.lat * 180 / M_PI;
         gps.longitude = dpos.lon * 180 / M_PI;
         gps.height    = gpsInfo.elv;
+        gps.utc       = gpsInfo.utc;
 
         mSharedData.setGpsData(gps);
     }
