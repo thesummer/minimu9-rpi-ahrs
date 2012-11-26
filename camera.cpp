@@ -6,6 +6,7 @@
 #include <thread.h>
 #include <vector.h>
 #include <shareddata.h>
+#include <gpsData.h>
 
 camera::camera(sharedData& sD, std::string filename):
      mSharedData(sD), mFile(filename, std::fstream::out), mImageCount(0), mRunning(false)
@@ -84,7 +85,7 @@ bool camera::takePicture()
     }
 
     mCap.rgb(frame);
-    sharedData::gpsData gps = mSharedData.getGpsData();
+    struct gpsData gps = mSharedData.getGpsData();
 
     std::ostringstream fileName;
     fileName << std::right;

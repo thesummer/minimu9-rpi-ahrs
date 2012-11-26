@@ -3,25 +3,18 @@
 
 #include<vector.h>
 #include<nmea/time.h>
+#include<gpsData.h>
 
 
 class sharedData
 {
 public:
-    struct gpsData
-    {
-        float longitude;
-        float latitude;
-        float height;
-        nmeaTIME utc;
-    };
-
     sharedData();
 
     quaternion getRotation();
     void setRotation(quaternion rotation);
 
-    gpsData  getGpsData();
+    struct gpsData getGpsData();
     void setGpsData(gpsData newGps);
     bool newGpsData() { return mNewGpsData; }
 

@@ -187,3 +187,31 @@ void itpuStart()
     attitude.start();
     etag.start();
 }
+
+void getEulerAngle(float angles[3])
+{
+    vector temp = (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
+    angles[0] = temp(0);
+    angles[1] = temp(1);
+    angles[2] = temp(2);
+}
+
+void setCameraInterval(int seconds)
+{
+    cam.setCaptureInterval(seconds);
+}
+
+void startCamera()
+{
+    cam.start();
+}
+
+void stopCamera()
+{
+    cam.stop();
+}
+
+struct gpsData getGps()
+{
+    return sd.getGpsData();
+}
