@@ -1,40 +1,50 @@
 OBJs := $(patsubst %.cpp, %.o, $(wildcard *.cpp))
-BIN := main
+OBJs += $(patsubst %.c, %.o, $(wildcard omair/*.c))
 
+BIN := main
+CXX := g++
 CC := g++
 
-CPPFLAGS += -I./nmealib/include -I.
+CFLAGS = -g -I. -I./nmealib/include
+
+CXXFLAGS += -I./nmealib/include -I.
 
 # All warnings
-CPPFLAGS += -Wall
+CXXFLAGS += -Wall
 
 # Use a modern language
-CPPFLAGS += --std=c++0x
+CXXFLAGS += --std=c++0x
 
 # Use boost libraries
-LDFLAGS += -L./libs -lpthread -lboost_program_options -lserial -lnmea -lopencv_core -lopencv_highgui
+LDFLAGS += -L. -L./libs -lpthread -lboost_program_options -lserial -lnmea -lopencv_core -lopencv_highgui
 
 # Put debugging info in there so we can get stack traces.
 #CPPFLAGS += -g -rdynamic
 
 # Optimize the code.
-CPPFLAGS += -O3
+CXXFLAGS += -O3
 
 # Fix http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42748
-CPPFLAGS += -Wno-psabi
+CXXFLAGS += -Wno-psabi
 
 # Generate .d files with dependency info
-CPPFLAGS += -MD -MP
+CXXFLAGS += -MD -MP
 
 all: vector.h.gch libs $(BIN)
 
 $(BIN) : $(OBJs)
-	$(CC)  $(OBJs) -o $(BIN) $(LDFLAGS)
+	$(CXX)  $(OBJs) -o $(BIN) $(LDFLAGS)
+
+%.o : %.cpp
+	$(CXX) -c $(CXXFLAGS) $<
+
+omair/%.o : %.c
+	$(CC) -c $(CFLAGS) $<
 
 DEPs := $(OBJs:%.o=%.d)
 
 vector.h.gch: vector.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) $< -o $@
+	$(CXX) $(CFLAGS) $(CXXFLAGS) $< -o $@
 
 
 .PHONY: libs
@@ -83,3 +93,4 @@ install: $(BIN)
 	install -m 0644 $(BIN)-calibrator.1 $(DESTDIR)$(man1dir)
 
 -include $(DEPs) vector.h.d
+ 

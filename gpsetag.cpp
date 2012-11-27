@@ -60,7 +60,7 @@ void *gpsEtag::threadGps()
         nmea_parse(&parser, temp.c_str(), temp.length(), &gpsInfo);
         nmea_info2pos(&gpsInfo, &dpos);
 
-        sharedData::gpsData gps;
+        gpsData gps;
         gps.latitude  = dpos.lat * 180 / M_PI;
         gps.longitude = dpos.lon * 180 / M_PI;
         gps.height    = gpsInfo.elv;

@@ -17,10 +17,10 @@
 namespace opts = boost::program_options;
 
 
-sharedData sd;
-static camera cam;
-static gpsEtag etag;
-static ahrs attitude;
+sharedData *sd;
+static camera *cam;
+static gpsEtag *etag;
+static ahrs *attitude;
 
 
 // An Euler angle could take 8 chars: -234.678, but usually we only need 6.
@@ -110,9 +110,9 @@ int itpuInit(int argc, char *argv[])
             return 0;
         }
 
-        attitude = new ahrs(sd, i2cDevice.c_str());
-        etag = new gpsEtag(sd, serialDevice);
-        cam  = new camera(sd, "./cam.log");
+        attitude = new ahrs(*sd, i2cDevice.c_str());
+        etag = new gpsEtag(*sd, serialDevice);
+        cam  = new camera(*sd, "./cam.log");
         sd   = new sharedData();
 
         rotation_output_function * output;
@@ -140,20 +140,20 @@ int itpuInit(int argc, char *argv[])
         // Figure out the basic operating mode and start running.
         if (mode == "raw")
         {
-            attitude.setFuseType(ahrs::raw);
+            attitude->setFuseType(ahrs::raw);
             output = &output_raw;
         }
         else if (mode == "gyro-only")
         {
-           attitude.setFuseType(ahrs::gyro_only);
+           attitude->setFuseType(ahrs::gyro_only);
         }
         else if (mode == "compass-only")
         {
-            attitude.setFuseType(ahrs::compass_only);
+            attitude->setFuseType(ahrs::compass_only);
         }
         else if (mode == "normal")
         {
-            attitude.setFuseType(ahrs::normal);
+            attitude->setFuseType(ahrs::normal);
         }
         else
         {
@@ -184,13 +184,13 @@ int itpuInit(int argc, char *argv[])
 
 void itpuStart()
 {
-    attitude.start();
-    etag.start();
+    attitude->start();
+    etag->start();
 }
 
 void getEulerAngle(float angles[3])
 {
-    vector temp = (vector)(rotation.toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
+    vector temp = (vector)(sd->getRotation().toRotationMatrix().eulerAngles(2, 1, 0) * (180 / M_PI));
     angles[0] = temp(0);
     angles[1] = temp(1);
     angles[2] = temp(2);
@@ -198,20 +198,20 @@ void getEulerAngle(float angles[3])
 
 void setCameraInterval(int seconds)
 {
-    cam.setCaptureInterval(seconds);
+    cam->setCaptureInterval(seconds);
 }
 
 void startCamera()
 {
-    cam.start();
+    cam->start();
 }
 
 void stopCamera()
 {
-    cam.stop();
+    cam->stop();
 }
 
 struct gpsData getGps()
 {
-    return sd.getGpsData();
+    return sd->getGpsData();
 }

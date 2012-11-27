@@ -35,7 +35,7 @@ struct gpsData sharedData::getGpsData()
     return temp;
 }
 
-void sharedData::setGpsData(sharedData::gpsData newGps)
+void sharedData::setGpsData(gpsData newGps)
 {
     pthread_mutex_lock(&mMutexGPS);
        this->mGpsData = newGps;

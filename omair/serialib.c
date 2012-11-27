@@ -7,6 +7,11 @@
  */
 
 #include "serialib.h"
+#include <unistd.h>
+
+#ifdef __linux__
+    static int             fd;
+#endif
 
 /*!
      \brief Open the serial port

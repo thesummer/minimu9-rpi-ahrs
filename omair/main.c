@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
 		    pthread_t thread1;
 
-		   pthread_create( &thread1, NULL, &usart_read_routine, NULL);
+           pthread_create( &thread1, NULL, usart_read_routine, NULL);
 
 
 /////////////////// Set up ITPU ////////////////////////

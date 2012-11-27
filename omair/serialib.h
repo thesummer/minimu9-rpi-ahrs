@@ -62,11 +62,5 @@
     int     ReadStringNoTimeOut  (char *String,char FinalChar,unsigned int MaxNbBytes);             // Read a string (no timeout)
 
 
-
-#ifdef __linux__
-    int             fd;
-#endif
-
-
 #endif // SERIALIB_H
 

@@ -83,7 +83,7 @@ OBDH_subsystem *OBDH;
 
  int tm_write(int TM_ID, float TM_values[], int num_of_TM)
   {
-  	unsigned char tm_buffer[40]={0};
+    char tm_buffer[40]={0};
   	unsigned char TM_ID_HIGH,TM_ID_LOW , CRC , size;
   	unsigned int i,Ret;
 
@@ -111,7 +111,7 @@ OBDH_subsystem *OBDH;
   		tm_buffer[35]='\0';
   	}
 
-  	CRC = updateCRC(0, tm_buffer, size);
+    CRC = updateCRC(0, (unsigned char*) tm_buffer, size);
 
   	// Write the CRC byte for TM
   	sprintf(tm_buffer, "%s%c", tm_buffer, CRC);

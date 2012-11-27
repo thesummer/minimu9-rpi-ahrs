@@ -55,7 +55,7 @@ unsigned char updateCRC(unsigned char crc, const unsigned char* data, int length
 	// use registers for speed
 	register int len = length;
 	register unsigned char crc8 = crc;
-	register unsigned char *p = data;
+    register const unsigned char *p = data;
 
 	while (len--)
 		crc8 = crc_table[crc8 ^ *p++];

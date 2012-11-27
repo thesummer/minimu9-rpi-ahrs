@@ -2,8 +2,9 @@
 #define _IMUUSPACE_H
 
 #include "IMU.h"
-#include "MinIMU9.h"
+//#include "MinIMU9.h"
 #include "itg3200.h"
+#include "LSM303.h"
 
 class imuUspace : public IMU {
 public:

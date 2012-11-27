@@ -1,6 +1,7 @@
 #ifndef GPSDATA_H
 #define GPSDATA_H
 
+#include <nmea/time.h>
 
 struct gpsData
 {

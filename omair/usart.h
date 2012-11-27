@@ -10,6 +10,6 @@
 
 extern unsigned char Receiver_Buffer[16];
 extern int serial_init(void);
-extern void *usart_read_routine();
+extern void *usart_read_routine(void * params);
 
 #endif /* USART_H_ */
