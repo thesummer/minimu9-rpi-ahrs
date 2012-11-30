@@ -44,7 +44,7 @@ LSM303::LSM303(const char * i2cDeviceName) :
 
     if (readMagReg(LSM303_WHO_AM_I_M) != 0x3C)
     {
-        throw std::runtime_error("Error getting \"Who Am I\" register.\n");
+        throw std::runtime_error("LSM303: Error getting \"Who Am I\" register.\n");
     }
 }
 
