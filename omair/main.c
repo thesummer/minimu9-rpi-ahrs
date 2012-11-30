@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
 
 	memory_alloc();
 	serial_init();
-	file_ADC1 = sensors_ADC_init(ADC1_addr);
-	file_ADC2 = sensors_ADC_init(ADC2_addr);
+    file_ADC1 = sensors_ADC_init(ADC1_addr);
+//	file_ADC2 = sensors_ADC_init(ADC2_addr);
 
 
 ///////////////////////     Thread Creation    ////////////////////////////
@@ -59,10 +59,10 @@ int main(int argc, char *argv[])
 ///////////////////  Write all the TMs   ///////////////           
 		   while (1)
 		   	   {
-		   		   delay_ms(5000);
+                   delay_ms(1000);
 
-		   		   read_ADC(file_ADC1,ADC1_addr,channel_num);
-		   		   read_ADC(file_ADC2,ADC2_addr,channel_num);
+                   read_ADC(file_ADC1,ADC1_addr,channel_num);
+//		   		   read_ADC(file_ADC2,ADC2_addr,channel_num);
 
 		   		   TM_update();
 

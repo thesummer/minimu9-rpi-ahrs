@@ -110,10 +110,10 @@ int itpuInit(int argc, char *argv[])
             return 0;
         }
 
+        sd   = new sharedData();
         attitude = new ahrs(*sd, i2cDevice.c_str());
         etag = new gpsEtag(*sd, serialDevice);
         cam  = new camera(*sd, "./cam.log");
-        sd   = new sharedData();
 
         rotation_output_function * output;
 

@@ -14,6 +14,7 @@
 #include "usart.h"
 #include "itpu.h"
 #include "gpsData.h"
+#include "nmea/time.h"
 
 // sync byte to synchronize the ground station and U-SPACE
 
@@ -156,7 +157,7 @@ OBDH_subsystem *OBDH;
 	  tm_write (temp_4_ID,&(OBDH->temp_4),1);
 	  tm_write (temp_6_ID,&(OBDH->temp_6),1);
 	  tm_write (temp_8_ID,&(OBDH->temp_8),1);
-	  tm_write (UTC_time_ID,&(OBDH->UTC_time),3);
+      tm_write (UTC_time_ID,(float*) &(OBDH->UTC_time),3);
     }
 
   // Write GPS telemetries
@@ -200,9 +201,9 @@ int TM_update()
     GPS->longitude = gps.longitude;
     GPS->altitude = gps.height;
 
-    OBDH->UTC_time[0] = gps.hour;
-    OBDH->UTC_time[1] = gps.min;
-    OBDH->UTC_time[2] = gps.sec;
+    OBDH->UTC_time[0] = gps.utc.hour;
+    OBDH->UTC_time[1] = gps.utc.min;
+    OBDH->UTC_time[2] = gps.utc.sec;
 
     ADCS->AHRS[0] = euler[0];
     ADCS->AHRS[1] = euler[1];
