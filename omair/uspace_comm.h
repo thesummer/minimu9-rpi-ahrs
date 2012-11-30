@@ -41,6 +41,7 @@ typedef struct {
 	float temp_4;
 	float temp_6;
 	float temp_8;
+	float UTC_time[3];
 
 } OBDH_subsystem;
 
@@ -70,7 +71,7 @@ extern void tm_power();
 extern void tm_OBDH();
 extern void tm_GPS();
 extern void tm_ADCS();
-extern int serial_init();
+extern int serial_init(void);
 int send_TM(unsigned char flag_set);
 int GPS_decoder();
 int ADCS_decoder();

@@ -49,7 +49,7 @@ unsigned int temp_2_ID 	  =  0x3351;
 unsigned int temp_4_ID	  =  0x3352;
 unsigned int temp_6_ID    =  0x3353;
 unsigned int temp_8_ID    =  0x3354;
-
+unsigned int UTC_time_ID  =  0x3355;
 
 // TM_ID of ADCS subsystem // subsystem has an ID of "0x55"
 
@@ -61,7 +61,7 @@ unsigned int AHRS_ID = 0x5561;
 unsigned int latitude_ID 	   =  0x7771;
 unsigned int longitude_ID      =  0x7772;
 unsigned int altitude_ID  	   =  0x7773;
-unsigned int UTC_time_ID       =  0x7774;
+
 
 
 /* telemeteries for u-space categorized according to subsystems*/
@@ -156,7 +156,7 @@ OBDH_subsystem *OBDH;
 	  tm_write (temp_4_ID,&(OBDH->temp_4),1);
 	  tm_write (temp_6_ID,&(OBDH->temp_6),1);
 	  tm_write (temp_8_ID,&(OBDH->temp_8),1);
-
+	  tm_write (UTC_time_ID,&(OBDH->UTC_time),3);
     }
 
   // Write GPS telemetries
@@ -167,7 +167,7 @@ OBDH_subsystem *OBDH;
 	  tm_write (latitude_ID,&(GPS->latitude),1);
 	  tm_write (longitude_ID,&(GPS->longitude),1);
 	  tm_write (altitude_ID,&(GPS->altitude),1);
-	  tm_write (UTC_time_ID,&(GPS->UTC_time),1);
+
 
     }
 
@@ -199,7 +199,10 @@ int TM_update()
     GPS->latitude = gps.latitude;
     GPS->longitude = gps.longitude;
     GPS->altitude = gps.height;
-    GPS->UTC_time = 10.10;   //format??
+
+    OBDH->UTC_time[0] = gps.hour;
+    OBDH->UTC_time[1] = gps.min;
+    OBDH->UTC_time[2] = gps.sec;
 
     ADCS->AHRS[0] = euler[0];
     ADCS->AHRS[1] = euler[1];
