@@ -12,7 +12,7 @@
 
 
 pthread_mutex_t count_mutex     = PTHREAD_MUTEX_INITIALIZER;
-#define DEVICE_PORT 		"/dev/ttyO2"                         // ttyO2 for beaglebord
+#define DEVICE_PORT 		"/dev/ttyO0"                         // ttyO2 for beaglebord
 #define DEVICE_SPEED 		115200								// data rate
 unsigned char Receiver_Buffer[16];
 // Open serial port

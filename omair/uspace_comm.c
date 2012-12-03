@@ -191,7 +191,7 @@ OBDH_subsystem *OBDH;
 
 int TM_update()
 {
-    float euler[3];
+    static float euler[3];
     getEulerAngle(euler);
 
     struct gpsData gps = getGps();
@@ -200,6 +200,7 @@ int TM_update()
     GPS->latitude = gps.latitude;
     GPS->longitude = gps.longitude;
     GPS->altitude = gps.height;
+    printf("GPS: %f \t %f \t %f \n", gps.longitude, gps.latitude, gps.height);
 
     OBDH->UTC_time[0] = gps.utc.hour;
     OBDH->UTC_time[1] = gps.utc.min;
@@ -208,6 +209,7 @@ int TM_update()
     ADCS->AHRS[0] = euler[0];
     ADCS->AHRS[1] = euler[1];
     ADCS->AHRS[2] = euler[2];
+    printf("Attitude: %f \t %f \t %f \n", euler[0], euler[1], euler[2]);
 
 return 0;
 }
@@ -275,6 +277,7 @@ int power_decoder()
 int OBDH_decoder()
 {
 	int result;
+    int interval;
 
 	switch (Receiver_Buffer[2])
 		{
@@ -284,13 +287,20 @@ int OBDH_decoder()
 				result = 1;
 				break;
   			case 0xB2:
+                interval = atoi((char*) &Receiver_Buffer[4]);
+                setCameraInterval(interval);
+                printf("Set camera interval to %d\n", interval);
   				result = 1;
   				break;
   			case 0xB3:
+                startCamera();
+                printf("Image capturing has started \n");
   				result = 1;
   				break;
   			case 0xB4:
-  				result = 1;
+                stopCamera();
+                printf("Image capturing was stopped\n");
+                result = 1;
   				break;
   			default:
   				result = 0;

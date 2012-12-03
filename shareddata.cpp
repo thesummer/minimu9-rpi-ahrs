@@ -4,7 +4,21 @@ sharedData::sharedData():
     mNewGpsData(false)
 {
      pthread_mutex_init(&mMutexRotation, NULL);
-     pthread_mutex_init(&mMutexGPS, NULL);
+     pthread_mutex_init(&mMutexGPS, NULL);     
+     gpsData temp;
+     temp.height = 0;
+     temp.latitude = 0;
+     temp.longitude = 0;
+
+     temp.utc.year = 1996;
+     temp.utc.mon = 12;
+     temp.utc.day = 22;
+     temp.utc.hour = 12;
+     temp.utc.min = 55;
+     temp.utc.sec = 0;
+     temp.utc.hsec = 0;
+
+     setGpsData(temp);
 }
 
 quaternion sharedData::getRotation()
